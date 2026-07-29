@@ -1,0 +1,67 @@
+name: Node CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "package.json"
+      - "package-lock.json"
+      - "server.js"
+      - "service-wrapper.js"
+      - "safety-engine.js"
+      - "test/**"
+      - "tools/**"
+      - "linux-cli/**"
+      - ".github/workflows/node-ci.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "package.json"
+      - "package-lock.json"
+      - "server.js"
+      - "service-wrapper.js"
+      - "safety-engine.js"
+      - "test/**"
+      - "tools/**"
+      - "linux-cli/**"
+      - ".github/workflows/node-ci.yml"
+
+jobs:
+  app-tests:
+    name: App Tests (Node 20)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Unit Tests
+        run: npm test
+
+      - name: Threat Analyzer Smoke
+        run: |
+          npm run analyze:intrusion
+          npm run analyze:malware
+
+  linux-cli-smoke:
+    name: Linux CLI Smoke (Node 20)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run CLI Overview Command
+        run: node linux-cli/bin/cyber-sec.js overview
