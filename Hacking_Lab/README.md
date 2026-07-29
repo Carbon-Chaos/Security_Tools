@@ -1,4 +1,4 @@
-# Home Lab Virtual LAN Platform
+# Hacking_Lab Virtual LAN Platform
 
 This module builds an isolated virtual LAN training environment on Proxmox using Terraform and Ansible.
 
@@ -51,6 +51,13 @@ This module builds an isolated virtual LAN training environment on Proxmox using
    - PowerShell: `./scripts/post-configure.ps1`
 6. Destroy the lab when done:
    - PowerShell: `./scripts/destroy.ps1`
+
+## Downloadable Bundle
+
+- Build a portable bundle zip from repository root:
+   - `powershell -ExecutionPolicy Bypass -File .\package-hacking-lab.ps1`
+- Output file:
+   - `downloads/Hacking_Lab_bundle.zip`
 
 ## Notes
 

@@ -5,9 +5,9 @@ dist/
 data/*.ndjson
 
 # Lab infrastructure generated artifacts
-lab-infra/terraform/proxmox/.terraform/
-lab-infra/terraform/proxmox/.terraform.lock.hcl
-lab-infra/terraform/proxmox/*.tfstate
-lab-infra/terraform/proxmox/*.tfstate.*
-lab-infra/terraform/proxmox/lab.plan
-lab-infra/ansible/inventory.ini
+Hacking_Lab/terraform/proxmox/.terraform/
+Hacking_Lab/terraform/proxmox/.terraform.lock.hcl
+Hacking_Lab/terraform/proxmox/*.tfstate
+Hacking_Lab/terraform/proxmox/*.tfstate.*
+Hacking_Lab/terraform/proxmox/lab.plan
+Hacking_Lab/ansible/inventory.ini
