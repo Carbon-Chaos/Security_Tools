@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Corporate Security Operations Console</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div id="login-view" class="login-shell">
+      <div class="login-card">
+        <h1>Security Operations Console</h1>
+        <p>Authorized access for SOC analysts, responders, and administrators.</p>
+        <form id="login-form" class="login-form">
+          <input id="username" placeholder="Username" required />
+          <input id="password" type="password" placeholder="Password" required />
+          <button type="submit">Sign in</button>
+        </form>
+        <p class="hint">Use admin / SecurePass2026! for the full experience.</p>
+      </div>
+    </div>
+
+    <div id="app-shell" class="app-shell hidden">
+      <aside class="sidebar">
+        <div>
+          <h2>SecOps</h2>
+          <p>Enterprise response workspace</p>
+        </div>
+        <nav>
+          <button class="nav-btn active" data-view="overview">Overview</button>
+          <button class="nav-btn" data-view="assets">Assets</button>
+          <button class="nav-btn" data-view="alerts">Alerts</button>
+          <button class="nav-btn" data-view="incidents">Incidents</button>
+          <button class="nav-btn" data-view="playbooks">Playbooks</button>
+          <button class="nav-btn" data-view="safety">Safety</button>
+        </nav>
+        <button id="logout-btn" class="secondary-btn">Sign out</button>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Corporate security command center</p>
+            <h1 id="welcome-title">Welcome</h1>
+          </div>
+          <div id="user-badge" class="user-badge"></div>
+        </header>
+
+        <div id="containment-banner" class="containment-banner hidden"></div>
+        <section id="overview-view" class="view-panel"></section>
+        <section id="assets-view" class="view-panel hidden"></section>
+        <section id="alerts-view" class="view-panel hidden"></section>
+        <section id="incidents-view" class="view-panel hidden"></section>
+        <section id="playbooks-view" class="view-panel hidden"></section>
+        <section id="safety-view" class="view-panel hidden"></section>
+      </main>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

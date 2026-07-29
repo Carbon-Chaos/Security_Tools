@@ -1,0 +1,12 @@
+{
+  "name": "cyber-sec-cli",
+  "version": "1.0.0",
+  "description": "Linux command-line security operations toolkit",
+  "type": "module",
+  "bin": {
+    "cyber-sec": "./bin/cyber-sec.js"
+  },
+  "scripts": {
+    "start": "node ./bin/cyber-sec.js"
+  }
+}

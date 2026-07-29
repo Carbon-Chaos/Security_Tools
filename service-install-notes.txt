@@ -1,0 +1,3 @@
+Windows service installation requires elevated privileges.
+If you run PowerShell as Administrator, the included install-service.ps1 script can register the monitor as a Windows service.
+Without elevation, the service entry in the Startup folder remains the fallback auto-start option.

@@ -1,0 +1,8 @@
+{
+  "name": "cyber-security-operations-platform-installer",
+  "version": "1.0.0",
+  "description": "Windows installer metadata for the security operations platform",
+  "scripts": {
+    "build": "powershell -ExecutionPolicy Bypass -File ..\\build-windows-installer.ps1"
+  }
+}
