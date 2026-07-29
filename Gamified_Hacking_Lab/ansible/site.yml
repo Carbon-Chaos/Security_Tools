@@ -1,0 +1,11 @@
+- name: Configure attacker VM with normal pentest toolchain
+  hosts: attacker
+  become: true
+  roles:
+    - attacker_tools
+
+- name: Configure intentionally vulnerable target training hosts
+  hosts: targets
+  become: true
+  roles:
+    - vuln_targets

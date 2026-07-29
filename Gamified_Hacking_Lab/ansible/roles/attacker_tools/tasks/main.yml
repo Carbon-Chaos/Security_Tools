@@ -1,0 +1,30 @@
+- name: Update apt cache
+  apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Install common terminal pentest tooling
+  apt:
+    name:
+      - nmap
+      - masscan
+      - sqlmap
+      - hydra
+      - gobuster
+      - nikto
+      - wfuzz
+      - john
+      - hashcat
+      - metasploit-framework
+      - wireshark-common
+      - tshark
+      - tcpdump
+      - netcat-openbsd
+      - curl
+      - jq
+    state: present
+
+- name: Ensure tmux for persistent sessions
+  apt:
+    name: tmux
+    state: present

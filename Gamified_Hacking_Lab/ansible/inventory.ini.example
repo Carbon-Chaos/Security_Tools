@@ -1,0 +1,13 @@
+[attacker]
+10.40.40.10 ansible_user=lab
+
+[targets]
+10.30.30.11 ansible_user=lab
+10.30.30.12 ansible_user=lab
+
+[soc]
+10.60.60.10 ansible_user=lab
+
+[all:vars]
+ansible_ssh_private_key_file=~/.ssh/id_ed25519
+ansible_python_interpreter=/usr/bin/python3

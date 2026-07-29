@@ -1,0 +1,35 @@
+- name: Update apt cache
+  apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Install vulnerable training apps and services
+  apt:
+    name:
+      - docker.io
+      - docker-compose
+      - python3
+      - python3-pip
+      - git
+    state: present
+
+- name: Enable and start docker
+  service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Deploy intentionally vulnerable web app (DVWA)
+  copy:
+    dest: /opt/dvwa-compose.yml
+    content: |
+      version: '3.8'
+      services:
+        dvwa:
+          image: vulnerables/web-dvwa:latest
+          ports:
+            - "8080:80"
+
+- name: Start DVWA container
+  command: docker compose -f /opt/dvwa-compose.yml up -d
+  changed_when: false

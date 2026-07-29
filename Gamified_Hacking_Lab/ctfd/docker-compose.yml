@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  db:
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ctfd_root_pass
+      MYSQL_DATABASE: ctfd
+      MYSQL_USER: ctfd
+      MYSQL_PASSWORD: ctfd_pass
+    volumes:
+      - ctfd_db:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+  ctfd:
+    image: ctfd/ctfd:3.7.3
+    restart: unless-stopped
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: mysql+pymysql://ctfd:ctfd_pass@db/ctfd
+      REDIS_URL: redis://redis:6379
+      WORKERS: 2
+      UPLOAD_PROVIDER: local
+      LOG_FOLDER: /var/log/CTFd
+      ACCESS_LOG: /var/log/CTFd/access.log
+      ERROR_LOG: /var/log/CTFd/error.log
+      REVERSE_PROXY: "false"
+    volumes:
+      - ctfd_uploads:/var/uploads
+      - ctfd_logs:/var/log/CTFd
+
+volumes:
+  ctfd_db:
+  ctfd_uploads:
+  ctfd_logs:
