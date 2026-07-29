@@ -1,0 +1,66 @@
+name: Infra CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "lab-infra/**"
+      - ".github/workflows/infra-ci.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "lab-infra/**"
+      - ".github/workflows/infra-ci.yml"
+
+jobs:
+  terraform:
+    name: Terraform Validate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: lab-infra/terraform/proxmox
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Init (no backend)
+        run: terraform init -backend=false
+
+      - name: Terraform Validate
+        run: terraform validate
+
+  ansible:
+    name: Ansible Lint And Syntax
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: lab-infra/ansible
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Ansible Tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible ansible-lint
+
+      - name: Ansible Lint
+        run: ansible-lint lab-router.yml lab-clients.yml
+
+      - name: Ansible Syntax Check
+        run: |
+          ansible-playbook -i inventory.ini.example --syntax-check lab-router.yml
+          ansible-playbook -i inventory.ini.example --syntax-check lab-clients.yml
