@@ -2,6 +2,7 @@ node_modules/
 dist/
 .env
 *.log
+data/*.ndjson
 
 # Lab infrastructure generated artifacts
 lab-infra/terraform/proxmox/.terraform/

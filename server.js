@@ -3,11 +3,15 @@ const cors = require('cors');
 const path = require('path');
 const crypto = require('crypto');
 const { ContainmentGateway } = require('./safety-engine');
+const { loadEnterpriseConfig } = require('./lib/enterprise-config');
+const { ReportStore } = require('./lib/report-store');
+const { ThreatService } = require('./lib/threat-service');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 const NODE_ENV = process.env.NODE_ENV || 'development';
+const enterpriseConfig = loadEnterpriseConfig();
 
 app.disable('x-powered-by');
 app.use(cors({ origin: true, credentials: true }));
@@ -48,6 +52,11 @@ const users = [
 const sessions = new Map();
 const containmentGateway = new ContainmentGateway({ scanIntervalMs: 8000 });
 containmentGateway.startBackgroundMonitoring();
+const reportStore = new ReportStore({
+  baseDir: path.resolve(__dirname, enterpriseConfig.dataDir),
+  retentionDays: enterpriseConfig.reportRetentionDays
+});
+const threatService = new ThreatService({ config: enterpriseConfig, store: reportStore });
 
 const assets = [
   { id: 'AS-1001', name: 'Finance Gateway', owner: 'Ops', criticality: 'Critical', department: 'Finance', status: 'Protected', lastSeen: '2 min ago', controls: ['EDR', 'MFA', 'SIEM'] },
@@ -109,6 +118,32 @@ function requireRole(allowedRoles) {
     }
     next();
   };
+}
+
+function getClientIp(req) {
+  const xff = req.headers['x-forwarded-for'];
+  if (typeof xff === 'string' && xff.trim()) {
+    return xff.split(',')[0].trim();
+  }
+
+  return req.ip || req.socket?.remoteAddress || null;
+}
+
+function requireThreatRole(req, res, next) {
+  return requireRole(['Administrator', 'Analyst', 'Responder'])(req, res, next);
+}
+
+function errorResponder(error, req, res) {
+  const status = error.statusCode || 500;
+  const payload = {
+    error: status >= 500 ? 'Internal server error.' : error.message
+  };
+
+  if (status >= 500) {
+    console.error('Threat API error:', error);
+  }
+
+  return res.status(status).json(payload);
 }
 
 app.get('/api/auth/me', authMiddleware, (req, res) => {
@@ -255,6 +290,80 @@ app.post('/api/incidents', authMiddleware, requireRole(['Administrator', 'Respon
   return res.json(incident);
 });
 
+app.post('/api/threat/intrusion/analyze', authMiddleware, requireThreatRole, async (req, res) => {
+  try {
+    const report = await threatService.analyzeIntrusion(req.body, {
+      username: req.user.username,
+      role: req.user.role,
+      sourceIp: getClientIp(req)
+    });
+
+    return res.json(report);
+  } catch (error) {
+    return errorResponder(error, req, res);
+  }
+});
+
+app.post('/api/threat/malware/analyze', authMiddleware, requireThreatRole, (req, res) => {
+  try {
+    const report = threatService.analyzeMalware(req.body, {
+      username: req.user.username,
+      role: req.user.role,
+      sourceIp: getClientIp(req)
+    });
+
+    return res.json(report);
+  } catch (error) {
+    return errorResponder(error, req, res);
+  }
+});
+
+app.get('/api/threat/reports', authMiddleware, requireThreatRole, (req, res) => {
+  try {
+    const reports = threatService.listReports(req.query.limit, {
+      username: req.user.username,
+      role: req.user.role,
+      sourceIp: getClientIp(req)
+    });
+
+    return res.json(reports);
+  } catch (error) {
+    return errorResponder(error, req, res);
+  }
+});
+
+app.get('/api/threat/reports/:id', authMiddleware, requireThreatRole, (req, res) => {
+  try {
+    const report = threatService.getReport(req.params.id, {
+      username: req.user.username,
+      role: req.user.role,
+      sourceIp: getClientIp(req)
+    });
+
+    if (!report) {
+      return res.status(404).json({ error: 'Report not found.' });
+    }
+
+    return res.json(report);
+  } catch (error) {
+    return errorResponder(error, req, res);
+  }
+});
+
+app.post('/api/threat/reports/prune', authMiddleware, requireRole(['Administrator']), (req, res) => {
+  try {
+    const result = threatService.prune({
+      username: req.user.username,
+      role: req.user.role,
+      sourceIp: getClientIp(req)
+    });
+
+    return res.json(result);
+  } catch (error) {
+    return errorResponder(error, req, res);
+  }
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -277,3 +386,14 @@ process.on('SIGINT', () => {
   console.log('SIGINT received, shutting down gracefully');
   server.close(() => process.exit(0));
 });
+
+setInterval(() => {
+  try {
+    const result = threatService.prune({ username: 'system-pruner', role: 'System' });
+    if (result.removed > 0) {
+      console.log(`Pruned ${result.removed} expired threat reports`);
+    }
+  } catch (error) {
+    console.error('Report pruning failed:', error.message);
+  }
+}, 6 * 60 * 60 * 1000);

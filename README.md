@@ -10,6 +10,7 @@ A production-style security operations console for authorized corporate environm
 - Safety containment gateway for policy-aware action review
 - Health endpoints for deployment checks
 - Threat analyzer CLI for intrusion tracing and malware triage
+- Enterprise threat analysis API with report persistence and audit logging
 
 ## Run locally
 1. Install Node.js 20+ and npm
@@ -63,3 +64,27 @@ node tools/threat-analyzer/cli.js malware --file .\sample1.bin --file .\sample2.
 ```
 
 Input samples are provided in `tools/threat-analyzer/samples`.
+
+## Enterprise Threat Analysis API
+Authenticated roles: Administrator, Analyst, Responder.
+
+- `POST /api/threat/intrusion/analyze`
+   - Body: `{ "events": [ ... ] }`
+   - Stores full report and audit trail entry.
+- `POST /api/threat/malware/analyze`
+   - Body: `{ "files": [{ "name": "sample.ps1", "contentBase64": "..." }] }`
+   - Decodes in memory, analyzes, stores report and audit trail entry.
+- `GET /api/threat/reports?limit=25`
+   - Returns report metadata list.
+- `GET /api/threat/reports/:id`
+   - Returns full report record.
+- `POST /api/threat/reports/prune`
+   - Administrator only, removes reports older than retention window.
+
+Enterprise configuration (`.env`):
+
+- `THREAT_MAX_EVENTS` max events per intrusion request (default 5000)
+- `THREAT_MAX_FILES` max files per malware request (default 20)
+- `THREAT_MAX_FILE_SIZE_BYTES` max per-file size in malware request (default 5MB)
+- `REPORT_RETENTION_DAYS` retention window for persisted reports (default 30)
+- `DATA_DIR` report/audit storage directory (default `data`)
