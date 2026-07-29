@@ -11,6 +11,7 @@ Copy-Item -Path (Join-Path $projectPath 'service-wrapper.js') -Destination $inst
 Copy-Item -Path (Join-Path $projectPath 'start.ps1') -Destination $installerDir -Force
 Copy-Item -Path (Join-Path $projectPath 'install.bat') -Destination $installerDir -Force
 Copy-Item -Path (Join-Path $projectPath 'launch-cyber-ops.cmd') -Destination $installerDir -Force
+Copy-Item -Path (Join-Path $projectPath 'run-cyber-ops.cmd') -Destination $installerDir -Force
 Copy-Item -Path (Join-Path $projectPath 'create-shortcuts.ps1') -Destination $installerDir -Force
 Copy-Item -Path (Join-Path $projectPath 'portable-readme.txt') -Destination $installerDir -Force
 Copy-Item -Recurse -Path (Join-Path $projectPath 'public') -Destination $installerDir -Force

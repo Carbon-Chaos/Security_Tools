@@ -38,6 +38,24 @@ Windows:
 Linux:
 - Run: `bash ./install-service.sh`
 
+## Standard Windows Installer (Setup.exe)
+
+This project includes a game-style Windows installer builder using Inno Setup.
+
+1. Install Inno Setup:
+   - `winget install -e --id JRSoftware.InnoSetup`
+2. Build Setup.exe from repository root:
+   - `npm run build:windows:setup`
+3. Output location:
+   - `windows-dist/game-installer/CyberSecurityOpsSetup-<version>.exe`
+
+Installer behavior:
+- Installs under Program Files
+- Adds Start Menu shortcut
+- Optional desktop shortcut
+- Adds uninstall entry in Windows Apps & Features
+- Launches the platform at the end of setup
+
 ## Notes
 This application is a professional prototype for authorized internal use and is not intended for direct internet exposure without hardening, secrets management, and real SIEM integration.
 

@@ -11,3 +11,6 @@ Hacking_Lab/terraform/proxmox/*.tfstate
 Hacking_Lab/terraform/proxmox/*.tfstate.*
 Hacking_Lab/terraform/proxmox/lab.plan
 Hacking_Lab/ansible/inventory.ini
+
+# Game-style installer build temp payload
+windows-dist/game-installer/payload/

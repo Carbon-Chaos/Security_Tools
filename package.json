@@ -9,6 +9,7 @@
     "dev": "node server.js",
     "prod": "node server.js",
     "service": "node service-wrapper.js",
+    "build:windows:setup": "powershell -ExecutionPolicy Bypass -File .\\build-game-installer.ps1",
     "test": "node --test",
     "analyze:threat": "node tools/threat-analyzer/cli.js",
     "analyze:intrusion": "node tools/threat-analyzer/cli.js intrusion --input tools/threat-analyzer/samples/intrusion-events.json",
