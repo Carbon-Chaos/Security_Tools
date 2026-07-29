@@ -14,3 +14,12 @@ Hacking_Lab/ansible/inventory.ini
 
 # Game-style installer build temp payload
 windows-dist/game-installer/payload/
+
+# Gamified lab sensitive/local files
+Gamified_Hacking_Lab/terraform/proxmox/.terraform/
+Gamified_Hacking_Lab/terraform/proxmox/.terraform.lock.hcl
+Gamified_Hacking_Lab/terraform/proxmox/*.tfstate
+Gamified_Hacking_Lab/terraform/proxmox/*.tfstate.*
+Gamified_Hacking_Lab/terraform/proxmox/lab.plan
+Gamified_Hacking_Lab/terraform/proxmox/terraform.tfvars
+Gamified_Hacking_Lab/.env

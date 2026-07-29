@@ -23,23 +23,38 @@ This is a real lab stack for local training:
 - Terraform 1.7+
 - Ansible (run from WSL/Ubuntu on Windows)
 - Docker Desktop (for CTFd)
-- VM templates in Proxmox:
-  - Kali/attacker template
-  - Ubuntu target template
-  - Optional SOC Ubuntu template
+- OpenSSH client (`ssh`, `scp`) available in PowerShell
 
 ## Quick Start (Windows + WSL)
-1. Copy variables file:
-   - `Copy-Item .\terraform\proxmox\terraform.tfvars.example .\terraform\proxmox\terraform.tfvars`
-2. Fill values in `terraform.tfvars`.
-3. Deploy VMs:
+1. Download supported cloud images:
+   - `./scripts/download-images.ps1`
+2. Create Proxmox VM templates from your Windows machine via SSH:
+   - `./scripts/create-proxmox-templates.ps1 -ProxmoxHost 10.0.0.10 -Node pve -Storage local-lvm`
+   - Optional Kali template if Kali qcow2 is in the images folder:
+   - `./scripts/create-proxmox-templates.ps1 -ProxmoxHost 10.0.0.10 -Node pve -Storage local-lvm -IncludeKali`
+3. Prepare credentials and template IDs:
+   - `Copy-Item .\.env.example .\.env`
+   - Edit `.env` with your Proxmox API token, node, storage, SSH key, and VMID values.
+4. Generate local Terraform vars from `.env` (kept out of git):
+   - `./scripts/load-secrets.ps1`
+5. Deploy VMs:
    - `./scripts/deploy.ps1`
-4. Configure VMs from WSL:
+   - Or one-step load + deploy:
+   - `./scripts/load-env-and-deploy.ps1`
+6. Configure VMs from WSL:
    - `wsl bash -lc "cd /mnt/c/Users/$USER/cyber-lab-platform/Gamified_Hacking_Lab/ansible && cp -n inventory.ini.example inventory.ini && ansible-playbook -i inventory.ini site.yml"`
-5. Start scoreboard:
+7. Start scoreboard:
    - `./scripts/start-ctfd.ps1`
-6. Open CTFd:
+8. Open CTFd:
    - `http://localhost:8000`
+
+## Image Notes
+- Automated download:
+  - Ubuntu 22.04 cloud image
+  - Debian 12 cloud image
+- Manual download only (licensing/distribution constraints):
+  - Kali images: `https://www.kali.org/get-kali/`
+  - Windows evaluation images/ISOs: `https://www.microsoft.com/en-us/evalcenter/`
 
 ## Teardown
 - `./scripts/destroy.ps1`

@@ -40,7 +40,7 @@ Linux:
 
 ## Standard Windows Installer (Setup.exe)
 
-This project includes a game-style Windows installer builder using Inno Setup.
+This project includes a full game-style installer that launches Mission Control (guided setup/play menu) after installation.
 
 1. Install Inno Setup:
    - `winget install -e --id JRSoftware.InnoSetup`
@@ -51,10 +51,19 @@ This project includes a game-style Windows installer builder using Inno Setup.
 
 Installer behavior:
 - Installs under Program Files
-- Adds Start Menu shortcut
+- Adds Start Menu shortcut for Mission Control
 - Optional desktop shortcut
 - Adds uninstall entry in Windows Apps & Features
-- Launches the platform at the end of setup
+- Launches Mission Control at the end of setup
+
+Mission Control options include:
+- Prepare local lab workspace in your user profile
+- Download VM cloud images
+- Create Proxmox templates over SSH
+- Open `.env` for credentials and template IDs
+- Deploy/destroy lab infrastructure
+- Configure VMs with WSL Ansible
+- Start CTFd scoreboard and open browser
 
 ## Notes
 This application is a professional prototype for authorized internal use and is not intended for direct internet exposure without hardening, secrets management, and real SIEM integration.

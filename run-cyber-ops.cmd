@@ -2,18 +2,6 @@
 setlocal
 set SCRIPT_DIR=%~dp0
 cd /d "%SCRIPT_DIR%"
-set "NODE_EXE=%SCRIPT_DIR%runtime\node.exe"
-if not exist "%NODE_EXE%" (
-  where node >nul 2>nul
-  if errorlevel 1 (
-    echo Node.js was not found. Please install Node.js 20+ from https://nodejs.org/
-    pause
-    exit /b 1
-  )
-  set "NODE_EXE=node"
-)
-
-echo Launching Cyber Security Operations Platform...
-start "Cyber Security Operations Platform" cmd /k "\"%NODE_EXE%\" server.js"
-start "" "http://localhost:3000"
+echo Launching Cyber Lab Mission Control...
+powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%game-mission-control.ps1"
 exit /b 0

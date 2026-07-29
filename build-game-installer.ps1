@@ -24,6 +24,7 @@ $filesToCopy = @(
   'start.ps1',
   'install.bat',
   'install-service.ps1',
+  'game-mission-control.ps1',
   'launch-cyber-ops.cmd',
   'run-cyber-ops.cmd',
   'README.md',
@@ -38,7 +39,7 @@ foreach ($relPath in $filesToCopy) {
   Copy-Item -Path $sourcePath -Destination (Join-Path $payloadDir $relPath) -Force
 }
 
-$dirsToCopy = @('public', 'node_modules', 'tools', 'Hacking_Lab')
+$dirsToCopy = @('public', 'node_modules', 'tools', 'Hacking_Lab', 'Gamified_Hacking_Lab')
 foreach ($relPath in $dirsToCopy) {
   $sourcePath = Join-Path $projectPath $relPath
   if (-not (Test-Path $sourcePath)) {

@@ -1,4 +1,4 @@
-#define MyAppName "Cyber Security Operations Platform"
+#define MyAppName "Cyber Lab Ops: Mission Control"
 #ifndef AppVersion
   #define AppVersion "2.0.0"
 #endif
@@ -30,14 +30,15 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "Create a &desktop icon"; GroupDescription: "Additional icons:"; Flags: unchecked
+Name: "launchhub"; Description: "Open Mission Control after setup"; GroupDescription: "Post-install:"; Flags: checkedonce
 
 [Files]
 Source: "{#PayloadDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\run-cyber-ops.cmd"; WorkingDir: "{app}"
-Name: "{autoprograms}\Hacking Lab Guide"; Filename: "{app}\Hacking_Lab\README.md"
+Name: "{autoprograms}\Gamified Hacking Lab Guide"; Filename: "{app}\Gamified_Hacking_Lab\README.md"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\run-cyber-ops.cmd"; WorkingDir: "{app}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\run-cyber-ops.cmd"; Description: "Launch {#MyAppName}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\run-cyber-ops.cmd"; Description: "Launch {#MyAppName}"; Flags: nowait postinstall skipifsilent; Tasks: launchhub
