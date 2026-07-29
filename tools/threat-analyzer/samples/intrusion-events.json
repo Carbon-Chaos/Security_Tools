@@ -1,0 +1,42 @@
+[
+  {
+    "timestamp": "2026-07-29T09:14:33Z",
+    "eventType": "auth_failure",
+    "action": "login_failed",
+    "sourceIp": "10.9.33.5",
+    "destinationIp": "172.16.4.20",
+    "headers": {
+      "x-forwarded-for": "185.220.101.42, 45.9.148.11, 10.9.33.5",
+      "forwarded": "for=185.220.101.42;proto=https;by=203.0.113.44",
+      "via": "1.1 proxy-a, 1.1 proxy-b (45.9.148.11)",
+      "user-agent": "Mozilla/5.0"
+    },
+    "system": {
+      "hostname": "idp-gateway-02",
+      "os": "Ubuntu 24.04",
+      "user": "svc-auth",
+      "process": "nginx",
+      "pid": 1190
+    },
+    "message": "Repeated authentication failures for admin@example.com from rotating source set"
+  },
+  {
+    "timestamp": "2026-07-29T09:16:09Z",
+    "eventType": "endpoint_exec",
+    "action": "powershell_start",
+    "clientIp": "192.168.1.74",
+    "destinationIp": "104.21.62.11",
+    "headers": {
+      "x-real-ip": "91.240.118.172"
+    },
+    "system": {
+      "hostname": "FIN-LAPTOP-07",
+      "os": "Windows 11",
+      "user": "finance.user",
+      "process": "powershell.exe",
+      "pid": 4124,
+      "commandLine": "powershell -enc SQBFAFgA..."
+    },
+    "message": "Suspicious encoded PowerShell command executed and attempted outbound callback"
+  }
+]

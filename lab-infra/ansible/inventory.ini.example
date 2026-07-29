@@ -1,0 +1,7 @@
+[lab_router]
+10.40.40.1 ansible_user=labuser
+
+[linux_lab_nodes]
+10.40.40.10 ansible_user=labuser
+10.20.20.20 ansible_user=labuser
+10.60.60.20 ansible_user=labuser

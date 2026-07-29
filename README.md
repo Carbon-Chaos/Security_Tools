@@ -9,6 +9,7 @@ A production-style security operations console for authorized corporate environm
 - Incident management and response playbooks
 - Safety containment gateway for policy-aware action review
 - Health endpoints for deployment checks
+- Threat analyzer CLI for intrusion tracing and malware triage
 
 ## Run locally
 1. Install Node.js 20+ and npm
@@ -38,3 +39,27 @@ Linux:
 
 ## Notes
 This application is a professional prototype for authorized internal use and is not intended for direct internet exposure without hardening, secrets management, and real SIEM integration.
+
+## Threat Analyzer CLI
+The repository includes a defensive analysis program at `tools/threat-analyzer/cli.js`.
+
+Intrusion analysis (reconstruct likely origin IP and hop chain):
+
+```powershell
+npm run analyze:intrusion
+```
+
+Malware analysis (static file triage with actor heuristics and repair guidance):
+
+```powershell
+npm run analyze:malware
+```
+
+Custom usage examples:
+
+```powershell
+node tools/threat-analyzer/cli.js intrusion --input .\my-events.json --output .\intrusion-report.json
+node tools/threat-analyzer/cli.js malware --file .\sample1.bin --file .\sample2.ps1 --output .\malware-report.json
+```
+
+Input samples are provided in `tools/threat-analyzer/samples`.

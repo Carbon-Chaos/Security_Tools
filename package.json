@@ -9,7 +9,10 @@
     "dev": "node server.js",
     "prod": "node server.js",
     "service": "node service-wrapper.js",
-    "test": "node --test"
+    "test": "node --test",
+    "analyze:threat": "node tools/threat-analyzer/cli.js",
+    "analyze:intrusion": "node tools/threat-analyzer/cli.js intrusion --input tools/threat-analyzer/samples/intrusion-events.json",
+    "analyze:malware": "node tools/threat-analyzer/cli.js malware --file tools/threat-analyzer/samples/suspicious-loader.ps1"
   },
   "engines": {
     "node": ">=20"

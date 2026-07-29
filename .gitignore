@@ -2,3 +2,11 @@ node_modules/
 dist/
 .env
 *.log
+
+# Lab infrastructure generated artifacts
+lab-infra/terraform/proxmox/.terraform/
+lab-infra/terraform/proxmox/.terraform.lock.hcl
+lab-infra/terraform/proxmox/*.tfstate
+lab-infra/terraform/proxmox/*.tfstate.*
+lab-infra/terraform/proxmox/lab.plan
+lab-infra/ansible/inventory.ini

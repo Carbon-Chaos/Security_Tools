@@ -1,0 +1,20 @@
+# DHCP/DNS for internal lab VLANs only.
+# No upstream resolvers are configured to keep the lab contained.
+
+port=53
+domain-needed
+bogus-priv
+no-resolv
+server=127.0.0.1
+listen-address=127.0.0.1
+
+{% for net in vlan_networks %}
+interface={{ parent_iface }}.{{ net.id }}
+dhcp-range={{ parent_iface }}.{{ net.id }},{{ net.dhcp_start }},{{ net.dhcp_end }},255.255.255.0,12h
+{% endfor %}
+
+# Example fake hostnames for practice
+domain=lab.local
+address=/intranet.lab.local/10.30.30.50
+address=/files.lab.local/10.30.30.60
+address=/soc.lab.local/10.60.60.20

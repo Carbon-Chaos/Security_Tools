@@ -1,0 +1,68 @@
+---
+- name: Configure isolated virtual LAN router
+  hosts: lab_router
+  become: true
+  vars:
+    parent_iface: "ens18"
+    vlan_networks:
+      - { id: 20, cidr: "10.20.20.0/24", gateway: "10.20.20.1", dhcp_start: "10.20.20.100", dhcp_end: "10.20.20.199" }
+      - { id: 30, cidr: "10.30.30.0/24", gateway: "10.30.30.1", dhcp_start: "10.30.30.100", dhcp_end: "10.30.30.199" }
+      - { id: 40, cidr: "10.40.40.0/24", gateway: "10.40.40.1", dhcp_start: "10.40.40.100", dhcp_end: "10.40.40.199" }
+      - { id: 50, cidr: "10.50.50.0/24", gateway: "10.50.50.1", dhcp_start: "10.50.50.100", dhcp_end: "10.50.50.199" }
+      - { id: 60, cidr: "10.60.60.0/24", gateway: "10.60.60.1", dhcp_start: "10.60.60.100", dhcp_end: "10.60.60.199" }
+      - { id: 99, cidr: "10.99.99.0/24", gateway: "10.99.99.1", dhcp_start: "10.99.99.100", dhcp_end: "10.99.99.199" }
+
+  tasks:
+    - name: Install routing and DHCP packages
+      ansible.builtin.apt:
+        update_cache: true
+        name:
+          - vlan
+          - dnsmasq
+          - nftables
+        state: present
+
+    - name: Enable IPv4 forwarding
+      ansible.builtin.copy:
+        dest: /etc/sysctl.d/90-lab-router.conf
+        mode: "0644"
+        content: |
+          net.ipv4.ip_forward=1
+
+    - name: Apply sysctl values
+      ansible.builtin.command: sysctl --system
+      changed_when: true
+
+    - name: Deploy VLAN netplan
+      ansible.builtin.template:
+        src: templates/netplan-lab-router.yaml.j2
+        dest: /etc/netplan/90-lab-router.yaml
+        mode: "0644"
+
+    - name: Deploy dnsmasq virtual LAN DHCP config
+      ansible.builtin.template:
+        src: templates/dnsmasq-lab.conf.j2
+        dest: /etc/dnsmasq.d/lab.conf
+        mode: "0644"
+
+    - name: Deploy nftables isolation policy
+      ansible.builtin.template:
+        src: templates/nftables-lab.conf.j2
+        dest: /etc/nftables.conf
+        mode: "0644"
+
+    - name: Apply netplan
+      ansible.builtin.command: netplan apply
+      changed_when: true
+
+    - name: Enable and restart dnsmasq
+      ansible.builtin.systemd:
+        name: dnsmasq
+        state: restarted
+        enabled: true
+
+    - name: Enable and restart nftables
+      ansible.builtin.systemd:
+        name: nftables
+        state: restarted
+        enabled: true

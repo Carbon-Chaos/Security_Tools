@@ -1,0 +1,40 @@
+#!/usr/sbin/nft -f
+
+flush ruleset
+
+table inet filter {
+  chain input {
+    type filter hook input priority 0;
+    policy drop;
+
+    iif "lo" accept
+    ct state established,related accept
+
+{% for net in vlan_networks %}
+    iifname "{{ parent_iface }}.{{ net.id }}" udp dport { 53, 67 } accept
+    iifname "{{ parent_iface }}.{{ net.id }}" tcp dport 53 accept
+    iifname "{{ parent_iface }}.{{ net.id }}" icmp type echo-request accept
+{% endfor %}
+  }
+
+  chain forward {
+    type filter hook forward priority 0;
+    policy drop;
+
+    ct state established,related accept
+
+    # SOC visibility into all VLANs
+    iifname "{{ parent_iface }}.60" accept
+
+    # Controlled user to server simulation path
+    iifname "{{ parent_iface }}.20" oifname "{{ parent_iface }}.30" tcp dport { 80, 443, 445 } accept
+
+    # Allow red team to detonation VLAN only
+    iifname "{{ parent_iface }}.40" oifname "{{ parent_iface }}.50" accept
+  }
+
+  chain output {
+    type filter hook output priority 0;
+    policy accept;
+  }
+}

@@ -1,0 +1,13 @@
+network:
+  version: 2
+  ethernets:
+    {{ parent_iface }}:
+      dhcp4: false
+  vlans:
+{% for net in vlan_networks %}
+    {{ parent_iface }}.{{ net.id }}:
+      id: {{ net.id }}
+      link: {{ parent_iface }}
+      addresses:
+        - {{ net.gateway }}/24
+{% endfor %}

@@ -1,0 +1,17 @@
+---
+- name: Baseline tools for Linux lab nodes
+  hosts: linux_lab_nodes
+  become: true
+  tasks:
+    - name: Install tooling
+      ansible.builtin.apt:
+        update_cache: true
+        name:
+          - curl
+          - wget
+          - jq
+          - net-tools
+          - tcpdump
+          - traceroute
+          - dnsutils
+        state: present

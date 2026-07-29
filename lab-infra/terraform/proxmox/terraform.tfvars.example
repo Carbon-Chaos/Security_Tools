@@ -1,0 +1,27 @@
+# Proxmox API details
+proxmox_api_url   = "https://pve.example.local:8006/api2/json"
+proxmox_api_token = "terraform@pve!lab=REPLACE_ME"
+proxmox_insecure  = true
+
+# Placement details
+target_node     = "pve"
+datastore_id    = "local-lvm"
+iso_datastore_id = "local"
+lab_bridge      = "vmbr200"
+
+# Linux cloud-init defaults
+linux_vm_username = "labuser"
+linux_vm_password = "ChangeThisImmediately!"
+ssh_public_key    = "ssh-ed25519 AAAA... replace-with-your-key"
+
+# Toggle optional guests
+enable_windows_victim = true
+
+# Template VMIDs prebuilt in Proxmox
+template_vmids = {
+  router_ubuntu = 9001
+  kali_linux    = 9002
+  ubuntu_victim = 9003
+  soc_ubuntu    = 9004
+  windows_11    = 9005
+}
