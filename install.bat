@@ -12,6 +12,11 @@ if not exist "%SCRIPT_DIR%node_modules" (
   echo Installing dependencies...
   npm install
 )
+echo Creating Desktop and Start Menu shortcuts...
+powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%create-shortcuts.ps1"
+if errorlevel 1 (
+  echo Shortcut creation was skipped. You can run create-shortcuts.ps1 manually.
+)
 echo Starting application...
-start "Cyber Security Operations" cmd /k "npm start"
+start "" "%SCRIPT_DIR%launch-cyber-ops.cmd"
 exit /b 0
