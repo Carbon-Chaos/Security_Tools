@@ -1,5 +1,18 @@
 # Corporate Security Operations Platform
 
+## Fake Hacking Game Mode (Primary)
+
+The Windows installer now launches a local fake hacking game by default.
+- No real targets
+- No CTF dependency
+- No external network exploitation
+- Single-player simulated host compromise progression
+
+Launch flow:
+- Run `run-cyber-ops.cmd`
+- Choose `Play Game`
+- Use commands in-game (`help`, `hosts`, `target`, `scan`, `enum`, `exploit`, `privesc`, `status`)
+
 A production-style security operations console for authorized corporate environments. It provides a role-based interface for monitoring assets, alerts, incidents, playbooks, and safety controls.
 
 ## Features

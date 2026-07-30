@@ -1,5 +1,3 @@
-$ErrorActionPreference = 'Stop'
-
 param(
   [Parameter(Mandatory = $true)]
   [string]$ProxmoxHost,
@@ -15,6 +13,8 @@ param(
   [switch]$IncludeKali,
   [switch]$ForceRecreate
 )
+
+$ErrorActionPreference = 'Stop'
 
 $ubuntuImage = Join-Path $ImagesDir 'jammy-server-cloudimg-amd64.img'
 $debianImage = Join-Path $ImagesDir 'debian-12-genericcloud-amd64.qcow2'

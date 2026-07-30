@@ -1,8 +1,8 @@
-$ErrorActionPreference = 'Stop'
-
 param(
   [string]$OutputDir = 'C:\Users\Public\Downloads\lab-images'
 )
+
+$ErrorActionPreference = 'Stop'
 
 New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
 

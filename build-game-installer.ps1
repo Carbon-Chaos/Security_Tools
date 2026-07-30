@@ -25,6 +25,7 @@ $filesToCopy = @(
   'install.bat',
   'install-service.ps1',
   'game-mission-control.ps1',
+  'fake-hacking-game.js',
   'launch-cyber-ops.cmd',
   'run-cyber-ops.cmd',
   'README.md',
